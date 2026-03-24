@@ -129,10 +129,10 @@
         <p class="text-slate-500 font-medium" id="sub-header">מחולל פעילות חווייתית בהתאמה אישית</p>
     </header>
 
-    <!-- Admin Interface -->
+    <!-- ממשק ניהול -->
     <div id="admin-view" class="hidden space-y-8">
         
-        <!-- Instructions -->
+        <!-- הוראות שימוש -->
         <div class="card p-6 bg-blue-50/50 border-blue-100">
             <h3 class="text-lg font-bold text-blue-900 mb-4 flex items-center gap-2">
                 <span>💡</span> איך בונים פעילות?
@@ -148,7 +148,8 @@
                 <div class="flex items-start gap-3">
                     <div class="step-number">2</div>
                     <div class="flex-1">
-                        <p class="mb-2"><b>היעזרו ב-AI:</b> לחצו על "🪄 העתק פרומפט ל-AI". המערכת תכין הוראה מפורטת שתחזיר רשימה נקייה ללא פתיח, אותה תדביקו ב-ChatGPT/Gemini.</p>
+                        <p class="mb-2"><b>היעזרו ב-AI (אופציונלי):</b> רוצים הגדרות או שאלות לכל מושג? לחצו על "🪄 העתק פרומפט ל-AI", העבירו ל-ChatGPT/Gemini, והדביקו את התשובה חזרה לכאן.</p>
+                        <p class="text-[10px] opacity-75 italic">ניתן להפריד בין מושג להגדרה בעזרת סימן | או בעזרת פסיק.</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-3">
@@ -164,7 +165,7 @@
             </div>
         </div>
 
-        <!-- Size Selection -->
+        <!-- בחירת גודל לוח -->
         <div class="card p-6">
             <h3 class="text-lg font-bold mb-4 text-slate-800 flex items-center gap-2">
                 <span>📐</span> באיזה גודל לוח תרצו להשתמש?
@@ -177,9 +178,9 @@
         </div>
 
         <div class="card p-8">
-            <h3 class="text-xl font-bold mb-4 text-slate-800">הזנת תוכן למשחק</h3>
+            <h3 class="text-xl font-bold mb-4 text-slate-800 text-right">הזנת תוכן למשחק</h3>
             <textarea id="terms-input" class="w-full h-48 p-4 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-400 mb-6 text-sm transition-all outline-none" 
-                placeholder="מושג 1 | הגדרה של המושג הראשון&#10;מושג 2 | הגדרה של המושג השני..."></textarea>
+                placeholder="מושג 1, הגדרה של המושג הראשון&#10;מושג 2 | הגדרה של המושג השני..."></textarea>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <button onclick="copyAIPrompt()" class="flex items-center justify-center gap-2 bg-purple-50 text-purple-700 py-4 rounded-2xl font-bold hover:bg-purple-100 transition shadow-sm border border-purple-100">
@@ -191,12 +192,12 @@
             </div>
         </div>
 
-        <!-- Admin Dashboard -->
+        <!-- לוח מנהל פעילות -->
         <div id="admin-dashboard" class="card p-8 hidden border-t-8 border-blue-600">
-            <h3 class="text-2xl font-bold mb-4 text-blue-900 flex items-center gap-2">
+            <h3 class="text-2xl font-bold mb-4 text-blue-900 flex items-center gap-2 text-right">
                 <span class="p-2 bg-blue-100 rounded-lg">📋</span> לוח בקרה למנהל הפעילות
             </h3>
-            <p class="text-sm text-slate-500 mb-6 bg-slate-50 p-3 rounded-xl border border-slate-100">
+            <p class="text-sm text-slate-500 mb-6 bg-slate-50 p-3 rounded-xl border border-slate-100 text-right">
                 הקריאו את ההגדרות בסדר אקראי. המשתתפים צריכים לזהות ולסמן את המושג המתאים בלוח שלהם.
             </p>
             <div id="master-questions-list" class="space-y-4"></div>
@@ -206,7 +207,7 @@
         </div>
     </div>
 
-    <!-- Participant View -->
+    <!-- ממשק משתתף -->
     <div id="participant-view" class="hidden">
         <div class="bingo-grid mb-8" id="bingo-board"></div>
         <div class="text-center p-6 bg-white rounded-3xl border-4 border-dashed border-blue-200 shadow-sm">
@@ -216,7 +217,7 @@
         </div>
     </div>
 
-    <!-- Share Modal -->
+    <!-- מודל שיתוף קישורים -->
     <div id="link-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center hidden z-50 p-4">
         <div class="bg-white p-8 rounded-[2.5rem] max-w-sm w-full shadow-2xl relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
@@ -242,10 +243,10 @@
         </div>
     </div>
 
-    <!-- AI Modal -->
+    <!-- מודל הסבר AI -->
     <div id="ai-instruction-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center hidden z-50 p-4">
         <div class="bg-white p-8 rounded-[3rem] max-w-lg w-full shadow-2xl text-right overflow-y-auto max-h-[90vh]">
-            <div class="text-4xl text-center mb-4 text-center">🪄</div>
+            <div class="text-4xl text-center mb-4">🪄</div>
             <h3 class="text-2xl font-black mb-4 text-slate-800 text-center">הפרומפט מוכן להעתקה!</h3>
             
             <div class="bg-purple-50 p-4 rounded-2xl border-2 border-purple-100 mb-6 text-right">
@@ -289,13 +290,13 @@
         </div>
     </div>
 
-    <!-- Win Modal -->
+    <!-- הודעת ניצחון -->
     <div id="win-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center hidden z-[100] p-4">
         <div class="bg-white p-10 rounded-[3rem] max-w-sm w-full shadow-2xl text-center border-4 border-green-500 scale-110">
-            <div class="text-6xl mb-4">🏆</div>
+            <div class="text-6xl mb-4 text-center">🏆</div>
             <h3 class="text-2xl font-black mb-4 text-green-700">כל הכבוד!</h3>
             <p class="text-slate-700 font-bold leading-relaxed mb-6">
-                נראה שניצחת, זה הזמן לבדוק האם הרצף שמצאת נכון.
+                כל הכבוד נראה שניצחת, זה הזמן לבדוק האם הרצף שמצאת נכון.
             </p>
             <button onclick="closeModal('win-modal')" class="w-full bg-green-600 text-white py-3 rounded-2xl font-bold shadow-lg">מעולה!</button>
         </div>
@@ -328,6 +329,25 @@
         }
     };
 
+    function parseLine(line) {
+        if (!line.trim()) return null;
+        let concept = "", definition = "";
+        
+        // עדיפות לסימן הצינור כחוצץ, אחר כך לפסיק
+        if (line.includes('|')) {
+            const parts = line.split('|');
+            concept = parts[0].trim();
+            definition = parts.slice(1).join('|').trim();
+        } else if (line.includes(',')) {
+            const parts = line.split(',');
+            concept = parts[0].trim();
+            definition = parts.slice(1).join(',').trim();
+        } else {
+            concept = line.trim();
+        }
+        return { concept, definition };
+    }
+
     function setGridSize(size) {
         currentGridSize = size;
         document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
@@ -344,9 +364,10 @@
     function copyAIPrompt() {
         const textInput = document.getElementById('terms-input');
         const text = textInput.value.trim();
-        const terms = text.split(/[,\n]+/).map(t => t.split('|')[0].trim()).filter(t => t.length > 0);
+        const lines = text.split('\n');
+        const concepts = lines.map(l => parseLine(l)).filter(p => p !== null).map(p => p.concept);
         
-        if (terms.length === 0) return alert("הזינו קודם כמה מושגים בתיבה למעלה.");
+        if (concepts.length === 0) return alert("הזינו קודם כמה מושגים בתיבה למעלה.");
 
         generatedPrompt = `אני מנחה פעילות חברתית וחווייתית ואני מכין משחק בינגו. 
 עבור כל אחד מהמושגים הבאים, כתוב הגדרה קצרה או שאלה שהתשובה עליה היא המושג. 
@@ -357,7 +378,7 @@
 3. ענה ברשימה נקייה בלבד, שורה לכל מושג.
 4. השתמש רק בסימן | להפרדה בין המושג להגדרה.
 
-המושגים הם: ${terms.join(", ")}`;
+המושגים הם: ${concepts.join(", ")}`;
 
         document.getElementById('prompt-preview').innerText = generatedPrompt;
         document.getElementById('ai-instruction-modal').classList.remove('hidden');
@@ -384,19 +405,24 @@
     function createGameLinks() {
         const text = document.getElementById('terms-input').value.trim();
         const lines = text.split('\n').filter(l => l.trim().length > 0);
-        const requiredCount = currentGridSize * currentGridSize;
+        const pairs = lines.map(l => parseLine(l)).filter(p => p !== null);
         
-        if (lines.length < requiredCount) {
-            alert(`עבור לוח של ${currentGridSize}x${currentGridSize} יש להזין לפחות ${requiredCount} מושגים. כרגע הזנת ${lines.length}.`);
+        const requiredCount = currentGridSize * currentGridSize;
+        if (pairs.length < requiredCount) {
+            alert(`עבור לוח של ${currentGridSize}x${currentGridSize} יש להזין לפחות ${requiredCount} מושגים. כרגע הזנת ${pairs.length}.`);
             return;
         }
 
         const baseUrl = window.location.href.split('?')[0];
         const rowSeparator = ":::";
         
-        const studentTerms = lines.map(l => l.split('|')[0].trim()).join(rowSeparator);
+        // יצירת קישור משתתף - מכיל רק את המושגים (החלק הראשון)
+        const studentTerms = pairs.map(p => p.concept).join(rowSeparator);
         const encodedStudent = btoa(unescape(encodeURIComponent(studentTerms)));
-        const encodedTeacher = btoa(unescape(encodeURIComponent(lines.join(rowSeparator))));
+        
+        // יצירת קישור מנהל - מכיל את המושגים וההגדרות
+        const teacherData = pairs.map(p => `${p.concept}|${p.definition}`).join(rowSeparator);
+        const encodedTeacher = btoa(unescape(encodeURIComponent(teacherData)));
 
         document.getElementById('student-link-input').value = `${baseUrl}?d=${encodedStudent}&s=${currentGridSize}`;
         document.getElementById('teacher-link-input').value = `${baseUrl}?d=${encodedTeacher}&s=${currentGridSize}&t=1`;
@@ -434,7 +460,7 @@
     function setupAdminDashboard(encodedData, size) {
         try {
             const decoded = decodeURIComponent(escape(atob(encodedData)));
-            const pairs = decoded.split(":::");
+            const items = decoded.split(":::");
             
             document.getElementById('admin-view').classList.remove('hidden');
             const dashboard = document.getElementById('admin-dashboard');
@@ -444,8 +470,8 @@
             dashboard.classList.remove('hidden');
             subHeader.innerText = `לוח בקרה למנהל הפעילות (${size} × ${size})`;
 
-            list.innerHTML = pairs.map(p => {
-                const parts = p.split('|');
+            list.innerHTML = items.map(item => {
+                const parts = item.split('|');
                 const term = parts[0] ? parts[0].trim() : "מושג חסר";
                 const def = parts[1] ? parts[1].trim() : "לא הוזנה הגדרה";
                 return `
