@@ -30,7 +30,7 @@
         <p class="text-gray-500 text-sm" id="sub-header">טוען מערכת...</p>
     </header>
 
-    <!-- Teacher Interface -->
+    <!-- ממשק מורה -->
     <div id="teacher-view" class="hidden space-y-6">
         <div class="card p-6">
             <h3 class="text-lg font-bold mb-3">1. הזנת תוכן למשחק</h3>
@@ -52,10 +52,11 @@
             <h3 class="text-lg font-bold mb-3 border-b pb-2 text-blue-800">לוח בקרה למורה</h3>
             <p class="text-xs text-gray-500 mb-4">הקריאו את ההגדרות בסדר אקראי. התלמידים צריכים לזהות את המושג.</p>
             <div id="master-questions-list" class="space-y-3"></div>
+            <button onclick="window.location.search = ''" class="mt-6 text-blue-600 text-xs underline">חזרה לעריכה</button>
         </div>
     </div>
 
-    <!-- Student Interface -->
+    <!-- ממשק תלמיד -->
     <div id="student-view" class="hidden">
         <div class="bingo-grid mb-6 shadow-sm" id="bingo-board"></div>
         <div class="text-center p-4 bg-blue-50 rounded-2xl border border-blue-100">
@@ -65,7 +66,7 @@
         <button onclick="window.location.search = ''" class="w-full mt-6 text-gray-400 text-xs underline">צור משחק חדש משלך</button>
     </div>
 
-    <!-- Share Modal -->
+    <!-- מודל שיתוף קישורים -->
     <div id="link-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center hidden z-50 p-4">
         <div class="bg-white p-6 rounded-3xl max-w-sm w-full shadow-2xl">
             <h3 class="text-xl font-bold mb-4 text-center">המשחק מוכן!</h3>
@@ -141,16 +142,22 @@ ${terms.map(t => t + " | [כאן תכתוב את ההגדרה]").join('\n')}
         const text = document.getElementById('terms-input').value.trim();
         const lines = text.split('\n').filter(l => l.trim().length > 0);
         
-        if (lines.length < 16) alert("מומלץ להשתמש ב-16 מושגים לפחות.");
+        if (lines.length < 4) {
+            alert("יש להזין לפחות 4 מושגים.");
+            return;
+        }
 
         const baseUrl = window.location.href.split('?')[0];
         
+        // הפרדת שורות על ידי תו מיוחד (לא סימן הצינור) כדי למנוע בלבול בפיענוח
+        const rowSeparator = ":::";
+        
         // Student Data (Terms only to keep URL short)
-        const studentTerms = lines.map(l => l.split('|')[0].trim()).join('|');
+        const studentTerms = lines.map(l => l.split('|')[0].trim()).join(rowSeparator);
         const encodedStudent = btoa(unescape(encodeURIComponent(studentTerms)));
         
         // Teacher Data (Full lines)
-        const encodedTeacher = btoa(unescape(encodeURIComponent(lines.join('|'))));
+        const encodedTeacher = btoa(unescape(encodeURIComponent(lines.join(rowSeparator))));
 
         document.getElementById('student-link-input').value = `${baseUrl}?d=${encodedStudent}`;
         document.getElementById('teacher-link-input').value = `${baseUrl}?d=${encodedTeacher}&t=1`;
@@ -160,7 +167,8 @@ ${terms.map(t => t + " | [כאן תכתוב את ההגדרה]").join('\n')}
     function setupStudentView(encodedData) {
         try {
             const decoded = decodeURIComponent(escape(atob(encodedData)));
-            const terms = decoded.split('|');
+            // פיצול לפי התו המיוחד החדש
+            const terms = decoded.split(":::");
             const shuffled = terms.sort(() => 0.5 - Math.random()).slice(0, 16);
             while (shuffled.length < 16) shuffled.push("---");
 
@@ -181,22 +189,25 @@ ${terms.map(t => t + " | [כאן תכתוב את ההגדרה]").join('\n')}
     function setupTeacherDashboard(encodedData) {
         try {
             const decoded = decodeURIComponent(escape(atob(encodedData)));
-            const pairs = decoded.split('|');
+            // פיצול לפי התו המיוחד החדש
+            const pairs = decoded.split(":::");
             
             document.getElementById('teacher-view').classList.remove('hidden');
             const dashboard = document.getElementById('teacher-dashboard');
             const list = document.getElementById('master-questions-list');
             
             dashboard.classList.remove('hidden');
-            document.querySelector('.card').classList.add('hidden'); // Hide editor
+            document.querySelector('.card').classList.add('hidden'); // הסתרת העורך
             subHeader.innerText = "לוח בקרה למורה";
 
             list.innerHTML = pairs.map(p => {
-                const [term, def] = p.split('|');
+                const parts = p.split('|');
+                const term = parts[0] ? parts[0].trim() : "ללא מושג";
+                const def = parts[1] ? parts[1].trim() : "לא הוזנה הגדרה";
                 return `
                     <div class="p-3 bg-blue-50 border-r-4 border-blue-500 rounded-lg">
-                        <div class="font-bold text-blue-900">${term.trim()}</div>
-                        <div class="text-sm text-gray-600">${def ? def.trim() : 'לא הוזנה הגדרה'}</div>
+                        <div class="font-bold text-blue-900">${term}</div>
+                        <div class="text-sm text-gray-600">${def}</div>
                     </div>
                 `;
             }).join('');
