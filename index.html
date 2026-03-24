@@ -11,7 +11,7 @@
         
         body { 
             font-family: 'Assistant', sans-serif; 
-            background: #f0f7ff;
+            background: #f0f7ff; /* חזרה לרקע כחלחל נקי */
             background-image: radial-gradient(#d1e4ff 1px, transparent 1px);
             background-size: 20px 20px;
             touch-action: manipulation; 
@@ -73,6 +73,19 @@
             border: 2px solid white;
         }
 
+        /* סגנון חדש להגדרות שהוקראו בלוח המנהל */
+        .admin-card {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .admin-card.read {
+            opacity: 0.5;
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+            text-decoration: line-through;
+            transform: scale(0.98);
+        }
+
         .step-number {
             width: 28px;
             height: 28px;
@@ -103,14 +116,11 @@
 
         footer {
             margin-top: auto;
-            padding: 2.5rem 1rem;
+            padding: 2rem 1rem;
             text-align: center;
             color: #64748b;
             font-size: 0.85rem;
             font-weight: 700;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(5px);
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
@@ -143,23 +153,24 @@
                 </p>
                 <div class="flex items-start gap-3">
                     <div class="step-number">1</div>
-                    <p><b>הזינו מושגים והגדרות:</b> הקלידו רשימה בתיבה למטה. מומלץ להכניס לפחות 16 מושגים (ללוח 4x4) ואף יותר לגיוון.</p>
+                    <div class="flex-1">
+                        <p><b>הזינו מושגים והגדרות:</b> יש לכם שתי אפשרויות:</p>
+                        <ul class="list-disc pr-5 mt-1 opacity-90 space-y-1">
+                            <li><b>ידנית:</b> כתבו מושג, פסיק (או |), ואז הגדרה. (לדוגמה: כלב, חברו הטוב של האדם).</li>
+                            <li><b>בעזרת AI:</b> כתבו רק את המושגים, ולחצו על "🪄 העתק פרומפט ל-AI" לקבלת הוראה מוכנה ל-ChatGPT/Gemini.</li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="step-number">2</div>
                     <div class="flex-1">
-                        <p class="mb-2"><b>היעזרו ב-AI (אופציונלי):</b> רוצים הגדרות או שאלות לכל מושג? לחצו על "🪄 העתק פרומפט ל-AI", העבירו ל-ChatGPT/Gemini, והדביקו את התשובה חזרה לכאן.</p>
-                        <p class="text-[10px] opacity-75 italic">ניתן להפריד בין מושג להגדרה בעזרת סימן | או בעזרת פסיק.</p>
+                        <p><b>בחרו גודל לוח:</b> החליטו על הגודל הרצוי (9, 16 או 25 מושגים).</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="step-number">3</div>
                     <div class="flex-1">
-                        <p><b>צרו והפיצו:</b> המערכת תייצר שני קישורים:</p>
-                        <ul class="list-disc pr-5 mt-2 opacity-90 space-y-1">
-                            <li><b>קישור מנהל:</b> בו רואים את המושגים וההגדרות להקראה למשתתפים.</li>
-                            <li><b>קישור משתתף:</b> קישור אחיד לכל הקבוצה. כל מי שיפתח אותו יקבל סדר ריבועים שונה ואקראי.</li>
-                        </ul>
+                        <p><b>צרו והפיצו:</b> תקבלו קישור <b>מנהל</b> (לכם) וקישור <b>משתתף</b> (לכל הקבוצה). כל מי שיפתח את קישור המשתתף יקבל סדר שונה ואקראי.</p>
                     </div>
                 </div>
             </div>
@@ -167,7 +178,7 @@
 
         <!-- בחירת גודל לוח -->
         <div class="card p-6">
-            <h3 class="text-lg font-bold mb-4 text-slate-800 flex items-center gap-2">
+            <h3 class="text-lg font-bold mb-4 text-slate-800 flex items-center gap-2 text-right">
                 <span>📐</span> באיזה גודל לוח תרצו להשתמש?
             </h3>
             <div class="grid grid-cols-3 gap-3" id="size-selector">
@@ -180,7 +191,7 @@
         <div class="card p-8">
             <h3 class="text-xl font-bold mb-4 text-slate-800 text-right">הזנת תוכן למשחק</h3>
             <textarea id="terms-input" class="w-full h-48 p-4 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-400 mb-6 text-sm transition-all outline-none" 
-                placeholder="מושג 1, הגדרה של המושג הראשון&#10;מושג 2 | הגדרה של המושג השני..."></textarea>
+                placeholder="מושג 1, הגדרה...&#10;מושג 2 | הגדרה..."></textarea>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <button onclick="copyAIPrompt()" class="flex items-center justify-center gap-2 bg-purple-50 text-purple-700 py-4 rounded-2xl font-bold hover:bg-purple-100 transition shadow-sm border border-purple-100">
@@ -198,7 +209,7 @@
                 <span class="p-2 bg-blue-100 rounded-lg">📋</span> לוח בקרה למנהל הפעילות
             </h3>
             <p class="text-sm text-slate-500 mb-6 bg-slate-50 p-3 rounded-xl border border-slate-100 text-right">
-                הקריאו את ההגדרות בסדר אקראי. המשתתפים צריכים לזהות ולסמן את המושג המתאים בלוח שלהם.
+                הקריאו את ההגדרות בסדר אקראי. לחצו על הגדרה כדי לסמן שהשתמשתם בה.
             </p>
             <div id="master-questions-list" class="space-y-4"></div>
             <button onclick="window.location.search = ''" class="mt-10 text-slate-400 text-sm font-bold flex items-center justify-center gap-2 w-full hover:text-slate-600 transition">
@@ -212,26 +223,26 @@
         <div class="bingo-grid mb-8" id="bingo-board"></div>
         <div class="text-center p-6 bg-white rounded-3xl border-4 border-dashed border-blue-200 shadow-sm">
             <div class="text-blue-600 text-2xl mb-2 animate-bounce">🎧</div>
-            <p class="text-blue-900 font-bold text-lg leading-tight text-center">סמנו את המושגים המתאימים בלוח שלכם!</p>
+            <p class="text-blue-900 font-bold text-lg leading-tight">סמנו את המושגים המתאימים בלוח שלכם!</p>
             <p class="text-slate-400 text-xs mt-2 uppercase tracking-widest font-bold" id="win-condition-text">רצף מלא = בינגו</p>
         </div>
     </div>
 
     <!-- מודל שיתוף קישורים -->
     <div id="link-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center hidden z-50 p-4">
-        <div class="bg-white p-8 rounded-[2.5rem] max-w-sm w-full shadow-2xl relative overflow-hidden">
+        <div class="bg-white p-8 rounded-[2.5rem] max-w-sm w-full shadow-2xl relative overflow-hidden text-right">
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
             <h3 class="text-2xl font-black mb-6 text-slate-800 text-center">הבינגו מוכן! 🚀</h3>
             <div class="space-y-6">
                 <div>
                     <label class="text-xs font-black text-blue-600 uppercase mb-2 block italic text-center" id="size-notice-label">לוח שנבחר: 4 × 4</label>
-                    <label class="text-xs font-black text-blue-600 uppercase mb-2 block text-right">קישור למשתתפים:</label>
+                    <label class="text-xs font-black text-blue-600 uppercase mb-2 block">קישור למשתתפים:</label>
                     <div class="flex gap-2">
                         <input id="student-link-input" readonly class="flex-1 p-3 border-2 border-slate-100 rounded-xl bg-slate-50 text-[10px] outline-none" dir="ltr">
                         <button onclick="copyText('student-link-input')" class="bg-blue-600 text-white px-4 rounded-xl text-xs font-bold hover:bg-blue-700 transition">העתק</button>
                     </div>
                 </div>
-                <div class="p-5 bg-yellow-50 rounded-2xl border-2 border-yellow-100 text-right">
+                <div class="p-5 bg-yellow-50 rounded-2xl border-2 border-yellow-100">
                     <label class="text-xs font-black text-yellow-700 uppercase mb-2 block">קישור מנהל (שמור אצלך):</label>
                     <div class="flex gap-2">
                         <input id="teacher-link-input" readonly class="flex-1 p-3 border-2 border-yellow-200 rounded-xl bg-white text-[10px] outline-none" dir="ltr">
@@ -239,13 +250,13 @@
                     </div>
                 </div>
             </div>
-            <button onclick="closeModal('link-modal')" class="w-full mt-8 text-slate-400 font-bold py-2 hover:text-slate-600 transition">סגור חלון</button>
+            <button onclick="closeModal('link-modal')" class="w-full mt-8 text-slate-400 font-bold py-2 hover:text-slate-600 transition text-center">סגור חלון</button>
         </div>
     </div>
 
     <!-- מודל הסבר AI -->
-    <div id="ai-instruction-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center hidden z-50 p-4">
-        <div class="bg-white p-8 rounded-[3rem] max-w-lg w-full shadow-2xl text-right overflow-y-auto max-h-[90vh]">
+    <div id="ai-instruction-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center hidden z-50 p-4 text-right">
+        <div class="bg-white p-8 rounded-[3rem] max-w-lg w-full shadow-2xl overflow-y-auto max-h-[90vh]">
             <div class="text-4xl text-center mb-4">🪄</div>
             <h3 class="text-2xl font-black mb-4 text-slate-800 text-center">הפרומפט מוכן להעתקה!</h3>
             
@@ -278,22 +289,18 @@
             </button>
 
             <div class="grid grid-cols-2 gap-2 mb-6 text-center">
-                <a href="https://chatgpt.com" target="_blank" class="bg-slate-100 p-2 rounded-xl text-xs font-bold hover:bg-slate-200 flex items-center justify-center gap-1">
-                    <span>🚀</span> ChatGPT
-                </a>
-                <a href="https://gemini.google.com" target="_blank" class="bg-slate-100 p-2 rounded-xl text-xs font-bold hover:bg-slate-200 flex items-center justify-center gap-1">
-                    <span>✨</span> Gemini
-                </a>
+                <a href="https://chatgpt.com" target="_blank" class="bg-slate-100 p-2 rounded-xl text-xs font-bold hover:bg-slate-200 flex items-center justify-center gap-1 text-center">🚀 ChatGPT</a>
+                <a href="https://gemini.google.com" target="_blank" class="bg-slate-100 p-2 rounded-xl text-xs font-bold hover:bg-slate-200 flex items-center justify-center gap-1 text-center">✨ Gemini</a>
             </div>
             
-            <button onclick="closeModal('ai-instruction-modal')" class="w-full text-slate-400 font-bold py-2">ביטול</button>
+            <button onclick="closeModal('ai-instruction-modal')" class="w-full text-slate-400 font-bold py-2 text-center">ביטול</button>
         </div>
     </div>
 
     <!-- הודעת ניצחון -->
-    <div id="win-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center hidden z-[100] p-4">
-        <div class="bg-white p-10 rounded-[3rem] max-w-sm w-full shadow-2xl text-center border-4 border-green-500 scale-110">
-            <div class="text-6xl mb-4 text-center">🏆</div>
+    <div id="win-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center hidden z-[100] p-4 text-center">
+        <div class="bg-white p-10 rounded-[3rem] max-w-sm w-full shadow-2xl border-4 border-green-500 scale-110">
+            <div class="text-6xl mb-4">🏆</div>
             <h3 class="text-2xl font-black mb-4 text-green-700">כל הכבוד!</h3>
             <p class="text-slate-700 font-bold leading-relaxed mb-6">
                 כל הכבוד נראה שניצחת, זה הזמן לבדוק האם הרצף שמצאת נכון.
@@ -332,8 +339,6 @@
     function parseLine(line) {
         if (!line.trim()) return null;
         let concept = "", definition = "";
-        
-        // עדיפות לסימן הצינור כחוצץ, אחר כך לפסיק
         if (line.includes('|')) {
             const parts = line.split('|');
             concept = parts[0].trim();
@@ -415,12 +420,8 @@
 
         const baseUrl = window.location.href.split('?')[0];
         const rowSeparator = ":::";
-        
-        // יצירת קישור משתתף - מכיל רק את המושגים (החלק הראשון)
         const studentTerms = pairs.map(p => p.concept).join(rowSeparator);
         const encodedStudent = btoa(unescape(encodeURIComponent(studentTerms)));
-        
-        // יצירת קישור מנהל - מכיל את המושגים וההגדרות
         const teacherData = pairs.map(p => `${p.concept}|${p.definition}`).join(rowSeparator);
         const encodedTeacher = btoa(unescape(encodeURIComponent(teacherData)));
 
@@ -466,7 +467,9 @@
             const dashboard = document.getElementById('admin-dashboard');
             const list = document.getElementById('master-questions-list');
             
-            document.querySelectorAll('.card').forEach(c => c.classList.add('hidden')); 
+            document.querySelectorAll('.card').forEach(c => {
+                if(!c.id || c.id !== 'admin-dashboard') c.classList.add('hidden');
+            }); 
             dashboard.classList.remove('hidden');
             subHeader.innerText = `לוח בקרה למנהל הפעילות (${size} × ${size})`;
 
@@ -475,7 +478,7 @@
                 const term = parts[0] ? parts[0].trim() : "מושג חסר";
                 const def = parts[1] ? parts[1].trim() : "לא הוזנה הגדרה";
                 return `
-                    <div class="p-4 bg-white border-2 border-blue-50 rounded-2xl shadow-sm hover:border-blue-200 transition-all group text-right">
+                    <div class="admin-card p-4 bg-white border-2 border-blue-50 rounded-2xl shadow-sm hover:border-blue-200 transition-all group text-right" onclick="this.classList.toggle('read')">
                         <div class="font-black text-blue-600 text-lg group-hover:text-blue-700">${term}</div>
                         <div class="text-slate-600 mt-1 font-medium italic">${def}</div>
                     </div>
@@ -505,7 +508,7 @@
 
         if (win && !hasWonOnce) {
             hasWonOnce = true;
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#a855f7', '#fbbf24', '#10b981'] });
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#2563eb', '#10b981'] });
             document.getElementById('win-modal').classList.remove('hidden');
         }
     }
@@ -514,7 +517,7 @@
         const el = document.getElementById(id);
         el.select();
         document.execCommand('copy');
-        alert("הועתק ללוח!");
+        alert("הועתק!");
     };
     window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
 </script>
