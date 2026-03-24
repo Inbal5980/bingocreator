@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>בינגו כיתתי חכם - מחולל למורים</title>
+    <title>בינגו חכם - מחולל פעילות חווייתית</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -87,6 +87,12 @@
             flex-shrink: 0;
         }
 
+        .size-btn {
+            background-color: white;
+            color: #475569;
+            border: 2px solid #e2e8f0;
+        }
+
         .size-btn.active {
             background-color: #3b82f6;
             color: white;
@@ -95,17 +101,16 @@
 
         .hidden { display: none !important; }
 
-        textarea::-webkit-scrollbar { width: 8px; }
-        textarea::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
-        textarea::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-
         footer {
             margin-top: auto;
-            padding: 2rem 1rem;
+            padding: 2.5rem 1rem;
             text-align: center;
             color: #64748b;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
@@ -120,20 +125,20 @@
         <div class="inline-block p-2 px-6 bg-blue-600 text-white rounded-full font-bold text-sm mb-4 shadow-lg shadow-blue-200">
             Bingo Creator 🎨
         </div>
-        <h1 class="text-4xl md:text-5xl font-extrabold text-slate-800 mb-2 tracking-tight">בינגו כיתתי חכם</h1>
-        <p class="text-slate-500 font-medium" id="sub-header">מחולל משחקים בהתאמה אישית</p>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-slate-800 mb-2 tracking-tight">בינגו חכם</h1>
+        <p class="text-slate-500 font-medium" id="sub-header">מחולל פעילות חווייתית בהתאמה אישית</p>
     </header>
 
-    <!-- ממשק מורה -->
-    <div id="teacher-view" class="hidden space-y-8">
+    <!-- Admin Interface -->
+    <div id="admin-view" class="hidden space-y-8">
         
-        <!-- הוראות שימוש -->
+        <!-- Instructions -->
         <div class="card p-6 bg-blue-50/50 border-blue-100">
             <h3 class="text-lg font-bold text-blue-900 mb-4 flex items-center gap-2">
-                <span>💡</span> איך בונים משחק? (מדריך למורה)
+                <span>💡</span> איך בונים פעילות?
             </h3>
-            <div class="space-y-4 text-sm text-blue-800 leading-relaxed">
-                <p class="font-bold border-b border-blue-200 pb-2 italic text-center md:text-right">
+            <div class="space-y-4 text-sm text-blue-800 leading-relaxed text-right">
+                <p class="font-bold border-b border-blue-200 pb-2 italic">
                     זהו כלי שיוצר משחק בינגו מותאם אישית בהתאם למושגים שתכניסו. הוא יוצר לוחות של 3x3, 4x4 או 5x5.
                 </p>
                 <div class="flex items-start gap-3">
@@ -143,7 +148,7 @@
                 <div class="flex items-start gap-3">
                     <div class="step-number">2</div>
                     <div class="flex-1">
-                        <p class="mb-2"><b>היעזרו ב-AI:</b> לחצו על "🪄 העתק פרומפט ל-AI" להפקת הגדרות אוטומטיות דרך ChatGPT או Gemini.</p>
+                        <p class="mb-2"><b>היעזרו ב-AI:</b> לחצו על "🪄 העתק פרומפט ל-AI". המערכת תכין הוראה מפורטת שתחזיר רשימה נקייה ללא פתיח, אותה תדביקו ב-ChatGPT/Gemini.</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-3">
@@ -151,23 +156,23 @@
                     <div class="flex-1">
                         <p><b>צרו והפיצו:</b> המערכת תייצר שני קישורים:</p>
                         <ul class="list-disc pr-5 mt-2 opacity-90 space-y-1">
-                            <li><b>קישור מורה:</b> בו רואים את המושגים וההגדרות להקראה.</li>
-                            <li><b>קישור תלמיד:</b> קישור אחיד לכל התלמידים. כל תלמיד שיפתח אותו יקבל סדר ריבועים שונה אקראי.</li>
+                            <li><b>קישור מנהל:</b> בו רואים את המושגים וההגדרות להקראה למשתתפים.</li>
+                            <li><b>קישור משתתף:</b> קישור אחיד לכל הקבוצה. כל מי שיפתח אותו יקבל סדר ריבועים שונה ואקראי.</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- בחירת גודל לוח -->
+        <!-- Size Selection -->
         <div class="card p-6">
             <h3 class="text-lg font-bold mb-4 text-slate-800 flex items-center gap-2">
                 <span>📐</span> באיזה גודל לוח תרצו להשתמש?
             </h3>
             <div class="grid grid-cols-3 gap-3" id="size-selector">
-                <button onclick="setGridSize(3)" id="size-3" class="size-btn py-3 border-2 border-slate-200 rounded-xl font-bold transition-all hover:border-blue-300">3 × 3<br><span class="text-[10px] font-normal">(9 מושגים)</span></button>
-                <button onclick="setGridSize(4)" id="size-4" class="size-btn active py-3 border-2 border-slate-200 rounded-xl font-bold transition-all hover:border-blue-300">4 × 4<br><span class="text-[10px] font-normal">(16 מושגים)</span></button>
-                <button onclick="setGridSize(5)" id="size-5" class="size-btn py-3 border-2 border-slate-200 rounded-xl font-bold transition-all hover:border-blue-300">5 × 5<br><span class="text-[10px] font-normal">(25 מושגים)</span></button>
+                <button onclick="setGridSize(3)" id="size-3" class="size-btn py-3 border-2 rounded-xl font-bold transition-all hover:border-blue-300">3 × 3<br><span class="text-[10px] font-normal">(9 מושגים)</span></button>
+                <button onclick="setGridSize(4)" id="size-4" class="size-btn active py-3 border-2 rounded-xl font-bold transition-all hover:border-blue-300">4 × 4<br><span class="text-[10px] font-normal">(16 מושגים)</span></button>
+                <button onclick="setGridSize(5)" id="size-5" class="size-btn py-3 border-2 rounded-xl font-bold transition-all hover:border-blue-300">5 × 5<br><span class="text-[10px] font-normal">(25 מושגים)</span></button>
             </div>
         </div>
 
@@ -186,12 +191,13 @@
             </div>
         </div>
 
-        <div id="teacher-dashboard" class="card p-8 hidden border-t-8 border-blue-600">
+        <!-- Admin Dashboard -->
+        <div id="admin-dashboard" class="card p-8 hidden border-t-8 border-blue-600">
             <h3 class="text-2xl font-bold mb-4 text-blue-900 flex items-center gap-2">
-                <span class="p-2 bg-blue-100 rounded-lg">📋</span> לוח בקרה למורה
+                <span class="p-2 bg-blue-100 rounded-lg">📋</span> לוח בקרה למנהל הפעילות
             </h3>
             <p class="text-sm text-slate-500 mb-6 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                הקריאו את ההגדרות בסדר אקראי. התלמידים צריכים לזהות ולסמן את המושג בלוח שלהם.
+                הקריאו את ההגדרות בסדר אקראי. המשתתפים צריכים לזהות ולסמן את המושג המתאים בלוח שלהם.
             </p>
             <div id="master-questions-list" class="space-y-4"></div>
             <button onclick="window.location.search = ''" class="mt-10 text-slate-400 text-sm font-bold flex items-center justify-center gap-2 w-full hover:text-slate-600 transition">
@@ -200,17 +206,17 @@
         </div>
     </div>
 
-    <!-- ממשק תלמיד -->
-    <div id="student-view" class="hidden">
+    <!-- Participant View -->
+    <div id="participant-view" class="hidden">
         <div class="bingo-grid mb-8" id="bingo-board"></div>
         <div class="text-center p-6 bg-white rounded-3xl border-4 border-dashed border-blue-200 shadow-sm">
             <div class="text-blue-600 text-2xl mb-2 animate-bounce">🎧</div>
-            <p class="text-blue-900 font-bold text-lg leading-tight">הקשיבו למורה וסמנו את המושגים!</p>
+            <p class="text-blue-900 font-bold text-lg leading-tight text-center">סמנו את המושגים המתאימים בלוח שלכם!</p>
             <p class="text-slate-400 text-xs mt-2 uppercase tracking-widest font-bold" id="win-condition-text">רצף מלא = בינגו</p>
         </div>
     </div>
 
-    <!-- מודל שיתוף קישורים -->
+    <!-- Share Modal -->
     <div id="link-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center hidden z-50 p-4">
         <div class="bg-white p-8 rounded-[2.5rem] max-w-sm w-full shadow-2xl relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
@@ -218,14 +224,14 @@
             <div class="space-y-6">
                 <div>
                     <label class="text-xs font-black text-blue-600 uppercase mb-2 block italic text-center" id="size-notice-label">לוח שנבחר: 4 × 4</label>
-                    <label class="text-xs font-black text-blue-600 uppercase mb-2 block">קישור לתלמידים:</label>
+                    <label class="text-xs font-black text-blue-600 uppercase mb-2 block text-right">קישור למשתתפים:</label>
                     <div class="flex gap-2">
                         <input id="student-link-input" readonly class="flex-1 p-3 border-2 border-slate-100 rounded-xl bg-slate-50 text-[10px] outline-none" dir="ltr">
                         <button onclick="copyText('student-link-input')" class="bg-blue-600 text-white px-4 rounded-xl text-xs font-bold hover:bg-blue-700 transition">העתק</button>
                     </div>
                 </div>
-                <div class="p-5 bg-yellow-50 rounded-2xl border-2 border-yellow-100">
-                    <label class="text-xs font-black text-yellow-700 uppercase mb-2 block">קישור מורה (שמור אצלך):</label>
+                <div class="p-5 bg-yellow-50 rounded-2xl border-2 border-yellow-100 text-right">
+                    <label class="text-xs font-black text-yellow-700 uppercase mb-2 block">קישור מנהל (שמור אצלך):</label>
                     <div class="flex gap-2">
                         <input id="teacher-link-input" readonly class="flex-1 p-3 border-2 border-yellow-200 rounded-xl bg-white text-[10px] outline-none" dir="ltr">
                         <button onclick="copyText('teacher-link-input')" class="bg-yellow-600 text-white px-4 rounded-xl text-xs font-bold hover:bg-yellow-700 transition">העתק</button>
@@ -236,25 +242,25 @@
         </div>
     </div>
 
-    <!-- מודל הסבר AI משופר -->
+    <!-- AI Modal -->
     <div id="ai-instruction-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center hidden z-50 p-4">
         <div class="bg-white p-8 rounded-[3rem] max-w-lg w-full shadow-2xl text-right overflow-y-auto max-h-[90vh]">
-            <div class="text-4xl text-center mb-4">🪄</div>
+            <div class="text-4xl text-center mb-4 text-center">🪄</div>
             <h3 class="text-2xl font-black mb-4 text-slate-800 text-center">הפרומפט מוכן להעתקה!</h3>
             
-            <div class="bg-purple-50 p-4 rounded-2xl border-2 border-purple-100 mb-6">
+            <div class="bg-purple-50 p-4 rounded-2xl border-2 border-purple-100 mb-6 text-right">
                 <p class="text-xs font-bold text-purple-700 mb-2 uppercase tracking-wider">תצוגה מקדימה של הפרומפט שיישלח:</p>
-                <div id="prompt-preview" class="text-[10px] text-slate-600 bg-white p-3 rounded-lg border border-purple-200 max-h-40 overflow-y-auto whitespace-pre-wrap font-mono"></div>
+                <div id="prompt-preview" class="text-[10px] text-slate-600 bg-white p-3 rounded-lg border border-purple-200 max-h-40 overflow-y-auto whitespace-pre-wrap font-mono" dir="rtl"></div>
             </div>
 
-            <p class="text-slate-600 text-sm mb-6 leading-relaxed">
-                העתקנו עבורכם הוראה מפורטת. בצעו את הצעדים הבאים:
+            <p class="text-slate-600 text-sm mb-6 leading-relaxed text-center font-bold">
+                העתקנו עבורכם הוראה סופר-מדויקת שתחזיר רק את רשימת ההגדרות.
             </p>
             
-            <ol class="space-y-4 mb-8">
+            <ol class="space-y-4 mb-8 text-right">
                 <li class="flex gap-3">
                     <span class="bg-purple-100 text-purple-700 w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0">1</span>
-                    <p class="text-sm">לחצו על הכפתור הסגול למטה כדי להעתיק את כל הטקסט.</p>
+                    <p class="text-sm">לחצו על הכפתור הסגול כדי להעתיק את הכל.</p>
                 </li>
                 <li class="flex gap-3">
                     <span class="bg-purple-100 text-purple-700 w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0">2</span>
@@ -262,7 +268,7 @@
                 </li>
                 <li class="flex gap-3">
                     <span class="bg-purple-100 text-purple-700 w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0">3</span>
-                    <p class="text-sm">העתיקו את התוצאה חזרה לתיבה בבינגו.</p>
+                    <p class="text-sm">ה-AI יחזיר רק רשימה נקייה. העתיקו אותה בחזרה לכאן.</p>
                 </li>
             </ol>
 
@@ -282,6 +288,18 @@
             <button onclick="closeModal('ai-instruction-modal')" class="w-full text-slate-400 font-bold py-2">ביטול</button>
         </div>
     </div>
+
+    <!-- Win Modal -->
+    <div id="win-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center hidden z-[100] p-4">
+        <div class="bg-white p-10 rounded-[3rem] max-w-sm w-full shadow-2xl text-center border-4 border-green-500 scale-110">
+            <div class="text-6xl mb-4">🏆</div>
+            <h3 class="text-2xl font-black mb-4 text-green-700">כל הכבוד!</h3>
+            <p class="text-slate-700 font-bold leading-relaxed mb-6">
+                נראה שניצחת, זה הזמן לבדוק האם הרצף שמצאת נכון.
+            </p>
+            <button onclick="closeModal('win-modal')" class="w-full bg-green-600 text-white py-3 rounded-2xl font-bold shadow-lg">מעולה!</button>
+        </div>
+    </div>
 </div>
 
 <footer>
@@ -292,20 +310,21 @@
     const subHeader = document.getElementById('sub-header');
     let currentGridSize = 4;
     let generatedPrompt = "";
+    let hasWonOnce = false;
 
     window.onload = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const data = urlParams.get('d');
         const size = parseInt(urlParams.get('s')) || 4;
-        const isTeacher = urlParams.get('t') === '1';
+        const isAdmin = urlParams.get('t') === '1';
 
         currentGridSize = size;
 
         if (data) {
-            if (isTeacher) setupTeacherDashboard(data, size);
-            else setupStudentView(data, size);
+            if (isAdmin) setupAdminDashboard(data, size);
+            else setupParticipantView(data, size);
         } else {
-            setupTeacherEditor();
+            setupAdminEditor();
         }
     };
 
@@ -313,12 +332,13 @@
         currentGridSize = size;
         document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById(`size-${size}`).classList.add('active');
-        document.getElementById('size-notice-label').innerText = `לוח שנבחר: ${size} × ${size}`;
+        const notice = document.getElementById('size-notice-label');
+        if(notice) notice.innerText = `לוח שנבחר: ${size} × ${size}`;
     }
 
-    function setupTeacherEditor() {
-        document.getElementById('teacher-view').classList.remove('hidden');
-        subHeader.innerText = "הכלי המושלם לסיכום נושא בכיף";
+    function setupAdminEditor() {
+        document.getElementById('admin-view').classList.remove('hidden');
+        subHeader.innerText = "מחולל פעילות חווייתית בהתאמה אישית";
     }
 
     function copyAIPrompt() {
@@ -328,9 +348,14 @@
         
         if (terms.length === 0) return alert("הזינו קודם כמה מושגים בתיבה למעלה.");
 
-        generatedPrompt = `אני מורה ואני מכינה משחק בינגו. עבור כל אחד מהמושגים הבאים, כתוב הגדרה קצרה או שאלה שהתשובה עליה היא המושג. 
-חשוב מאוד: החזר לי את התוצאה בדיוק בפורמט הבא, כדי שאוכל להדביק אותה חזרה לכלי שלי (המושג, אחריו סימן | ואז ההגדרה):
-${terms.map(t => t + " | [כאן תכתוב את ההגדרה]").join('\n')}
+        generatedPrompt = `אני מנחה פעילות חברתית וחווייתית ואני מכין משחק בינגו. 
+עבור כל אחד מהמושגים הבאים, כתוב הגדרה קצרה או שאלה שהתשובה עליה היא המושג. 
+
+חשוב מאוד - דרישות פורמט:
+1. החזר לי את התוצאה בדיוק בפורמט הבא: מושג | הגדרה
+2. אל תכתוב שום פתיח, אל תכתוב "בטח, הנה הרשימה" ואל תכתוב שום סיומת או שאלות המשך.
+3. ענה ברשימה נקייה בלבד, שורה לכל מושג.
+4. השתמש רק בסימן | להפרדה בין המושג להגדרה.
 
 המושגים הם: ${terms.join(", ")}`;
 
@@ -378,7 +403,7 @@ ${terms.map(t => t + " | [כאן תכתוב את ההגדרה]").join('\n')}
         document.getElementById('link-modal').classList.remove('hidden');
     }
 
-    function setupStudentView(encodedData, size) {
+    function setupParticipantView(encodedData, size) {
         try {
             const decoded = decodeURIComponent(escape(atob(encodedData)));
             const terms = decoded.split(":::");
@@ -386,9 +411,10 @@ ${terms.map(t => t + " | [כאן תכתוב את ההגדרה]").join('\n')}
             const shuffled = terms.sort(() => 0.5 - Math.random()).slice(0, totalRequired);
             while (shuffled.length < totalRequired) shuffled.push("---");
 
-            document.getElementById('student-view').classList.remove('hidden');
+            document.getElementById('participant-view').classList.remove('hidden');
             subHeader.innerText = `לוח ${size} × ${size} אישי`;
-            document.getElementById('win-condition-text').innerText = `רצף של ${size} = בינגו`;
+            const winText = document.getElementById('win-condition-text');
+            if(winText) winText.innerText = `רצף של ${size} = בינגו`;
             
             const board = document.getElementById('bingo-board');
             board.innerHTML = "";
@@ -405,19 +431,18 @@ ${terms.map(t => t + " | [כאן תכתוב את ההגדרה]").join('\n')}
         } catch (e) { alert("שגיאה בטעינת המשחק"); }
     }
 
-    function setupTeacherDashboard(encodedData, size) {
+    function setupAdminDashboard(encodedData, size) {
         try {
             const decoded = decodeURIComponent(escape(atob(encodedData)));
             const pairs = decoded.split(":::");
             
-            document.getElementById('teacher-view').classList.remove('hidden');
-            const dashboard = document.getElementById('teacher-dashboard');
+            document.getElementById('admin-view').classList.remove('hidden');
+            const dashboard = document.getElementById('admin-dashboard');
             const list = document.getElementById('master-questions-list');
             
-            dashboard.classList.remove('hidden');
             document.querySelectorAll('.card').forEach(c => c.classList.add('hidden')); 
             dashboard.classList.remove('hidden');
-            subHeader.innerText = `לוח בקרה למורה (${size} × ${size})`;
+            subHeader.innerText = `לוח בקרה למנהל הפעילות (${size} × ${size})`;
 
             list.innerHTML = pairs.map(p => {
                 const parts = p.split('|');
@@ -430,7 +455,7 @@ ${terms.map(t => t + " | [כאן תכתוב את ההגדרה]").join('\n')}
                     </div>
                 `;
             }).join('');
-        } catch (e) { alert("שגיאה בטעינת לוח המורה"); }
+        } catch (e) { alert("שגיאה בטעינת לוח המנהל"); }
     }
 
     function checkWin(size) {
@@ -452,8 +477,10 @@ ${terms.map(t => t + " | [כאן תכתוב את ההגדרה]").join('\n')}
         }
         if (diag1 || diag2) win = true;
 
-        if (win) {
+        if (win && !hasWonOnce) {
+            hasWonOnce = true;
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#3b82f6', '#a855f7', '#fbbf24', '#10b981'] });
+            document.getElementById('win-modal').classList.remove('hidden');
         }
     }
 
